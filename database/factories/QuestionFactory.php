@@ -12,7 +12,7 @@ $factory->define(Question::class, function (Faker $faker) {
         'body' => $faker->paragraph(rand(3, 7), true),
         //paragraph return array so need 'true' to covert to string
         'views' => rand(0, 10),
-        'answers' => rand(0, 10),
+        'answers_count' => rand(0, 10),
         'votes' => rand(-3, 10),
     ];
 });
