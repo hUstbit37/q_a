@@ -3,7 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Mail\Markdown;
 use Illuminate\Support\Str;
+use Parsedown;
 
 class Question extends Model
 {
@@ -41,7 +43,9 @@ class Question extends Model
 
     public function getBodyHtmlAttribute()
     {
-        return \Parsedown::instance()->text($this->body);
+//        $Parsedown = new Parsedown();
+//        return $Parsedown->text($this->body);
+        return Parsedown::instance()->text($this->body);
     }
 
     public function answers()
