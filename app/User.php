@@ -41,6 +41,18 @@ class User extends Authenticatable
         return $this->hasMany(Question::class);
     }
 
+    public function favorites() {
+        /*
+         * Mặc định Laravel sẽ ngầm coi bảng trung gian là question_user, vì
+            ở đây ta đặt tên khác là favorites nên ta cần truyền tên bảng vào để Laravel hiểu
+         * Đối số thứ 3 và 4: user_id, question_id có thể không cần truyền vào vì Laravel
+            ngầm hiểu mặc định lấy nametable_id, nếu trong bảng trung gian đặt tên khác thì
+            phải truyền đối số vào.
+        */
+        return $this->belongsToMany(Question::class, 'favorites', 'user_id', 'question_id')
+            ->withTimestamps();
+    }
+
     public function getUrlAttribute()
     {
 //        return route("questions.show", $this->id);

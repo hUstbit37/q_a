@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Mail\Markdown;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Parsedown;
 
@@ -11,11 +12,13 @@ class Question extends Model
 {
     protected $fillable = ['title', 'body'];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function setTitleAttribute($value) {
+    public function setTitleAttribute($value)
+    {
         $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
@@ -57,5 +60,26 @@ class Question extends Model
     {
         $this->best_answer_id = $answer->id;
         $this->save();
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(User::class, 'favorites')
+            ->withTimestamps();
+    }
+
+    public function isFavorited()
+    {
+        return $this->favorites()->where('user_id', Auth::id())->count() > 0;
+    }
+
+    public function getIsFavoritedAttribute()
+    {
+        return $this->favorites();
+    }
+
+    public function getFavoritesCountAttribute()
+    {
+        return $this->favorites->count();
     }
 }
